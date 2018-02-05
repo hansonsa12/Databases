@@ -1,0 +1,92 @@
+Select ordname, ordcity
+FROM ordertbl
+Where To_Char(orddate, 'DD-MON-YY')='23-JAN-07'
+
+SELECT ordno, orddate
+FROM ordertbl
+Where ordstate = 'WA'
+and orddate LIKE '%FEB%'
+order by ordno
+
+SELECT ordno, orddate
+FROM ordertbl
+Where ordstate = 'WA'
+and To_Char(orddate, 'MM')= 02
+order by ordno
+
+SELECT prodno, prodname
+FROM product
+Where To_Char(prodnextshipdate, 'Mon-YYYY') = 'Feb-2007'
+Order by prodno
+
+SELECT ordno, (orddate + 5) AS "Arrival Date"
+FROM ordertbl
+Where To_Char(orddate, 'Mon-YYYY') = 'Feb-2007'
+
+SELECT prodno, prodprice
+FROM product
+Where prodprice NOT LIKE '%.%'
+
+
+SELECT Distinct To_Char(prodnextshipdate, 'DD')AS Day
+FROM product
+Where prodnextshipdate IS NOT NULL
+Order By Day
+
+SELECT ordno, orddate, To_Date('Dec 31, 2007','Mon DD, YYYY')-OrdDate AS "Days since order"
+FROM ordertbl
+
+1.)
+SELECT first_name,last_name,phone
+FROM student
+Where To_Char(registration_date, 'MM/DD/YYYY')= '02/13/2007'
+order by last_name;
+
+2.)
+SElECT course_no, section_id, start_date_time
+FROM section
+Where location LIKE 'L509'
+Order by start_date_time;
+
+3.)
+SELECT course_no, section_id, start_date_time, instructor_id, capacity
+FROM section
+Where To_Char(start_date_time, 'MON-YY') = 'JUL-07'
+order by start_date_time, course_no;
+
+4.)
+SELECT student_id, section_id, final_grade
+FROM enrollment
+Where To_Char(enroll_date, 'Mon-YYYY') = 'Jan-2007'
+AND final_grade IS NOT NULL;
+
+5.)
+SELECT To_Date('Jan 11, 2016', 'Mon DD, YYYY') + 109
+FROM dual;
+
+6.)
+
+
+
+7.)
+SELECT last_name, first_name
+FROM student
+Where zip like 11368
+AND registration_date > created_date + 2;
+
+8.)
+SELECT first_name, last_name,sys_date - registration_date AS "Years"
+FROM student
+Where phone LIKE '%212%';
+
+9.)
+SELECT distinct To_Char(start_date_time, 'HH:MI') as "START"
+FROM section
+order by "START";
+
+10.)
+SELECT student_id, section_id, To_Date('10:19', 'HH:MI') AS "ENROLL TIME"
+FROM enrollment *EDIT*
+
+
+EDIT numbers 6, 8, and 10
