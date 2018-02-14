@@ -1,0 +1,49 @@
+SELECT custfirstname, custlastname, prodname
+from customer Inner join ordertbl
+on customer.custno = ordertbl.custno
+Inner join ordline
+On ordertbl.ordno = ordline.ordno
+Inner join product
+On ordline.prodno = product.prodno
+
+
+1.)
+SELECT first_name, last_name, phone
+FROM student s INNER JOIN zipcode z
+On s.zip = z.zip
+Where z.city = 'Newark'
+Order by s.last_name, s.first_name;
+
+2.)
+???????????????????
+Select course_no, prerequisite, description
+from course INNER JOIN course.prerequisite
+Where course_no like '3%'
+
+3.)
+SELECT c.course_no, description
+From section s INNER JOIN instructor x
+ON s.instructor_id = x.instructor_id
+INNER JOIN course c
+ON s.course_no = c.course_no
+Where x.instructor_id LIKE '%108%'
+and c.course_no LIKE '1%'
+order by c.course_no;
+
+4.)
+SELECT grade_type_code, description, number_per_section
+FROM grade_type_weight g INNER JOIN section s
+ON g.section_id = s.section_id
+INNER JOIN course c
+ON c.course_no = s.course_no
+Where c.course_no LIKE '%144%';
+
+5.)
+SELECT last_name ||','|| first_name  AS STUDENT_NAME
+FROM student s INNER JOIN grade g
+ON s.student_id = g.student_id
+HAVING AVG(g.numeric_grade) > 93
+GROUP by s.first_name, s.last_name
+ORder by s.last_name, s.first_name;
+
+6.)
