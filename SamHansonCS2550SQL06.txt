@@ -1,0 +1,269 @@
+SELECT custfirstname, custlastname, count(*) AS Num_Orders
+FROM customer c INNER JOIN ordertbl o
+on c.custno=o.custno
+GROUP BY custfirstname, custlastname
+HAVING COUNT(*)=
+(SELECT MAX(Num_Orders)
+FROM
+(SELECT custfirstname, custlastname, count(*) AS Num_Orders
+FROM customer c INNER JOIN ordertbl o
+on c.custno=o.custno
+GROUP BY custfirstname, custlastname));
+
+SELECT e.empno, empfirstname, emplastname, count(*) AS Num_Orders_Handled
+FROM employee e INNER JOIN ordertbl o
+on e.empno = o.empno
+group by e.empno, empfirstname, emplastname
+HAVING COUNT(*) >=
+(SELECT AVG(Num_Orders_Handled)
+FROM
+(SELECT e.empno, empfirstname, emplastname, count(*) AS Num_Orders_Handled
+FROM employee e INNER JOIN ordertbl o
+on e.empno = o.empno
+group by e.empno, empfirstname, emplastname));
+
+SELECT c.custno, custfirstname, custlastname
+  FROM customer c INNER JOIN ordertbl o
+  on c.custno = o.custno
+  INNER JOIN ordline l
+  on o.ordno = l.ordno
+  GROUP BY c.custno, custfirstname, custlastname
+  HAVING SUM(QTY)=
+              (SELECT MAX(total_ordered)
+              FROM
+              (SELECT c.custno, SUM(QTY) AS total_ordered 
+               FROM customer c INNER JOIN ordertbl o
+              on c.custno = o.custno
+              INNER JOIN ordline l
+              on o.ordno = l.ordno
+              GROUP BY c.custno))
+              
+Select empno
+from employee
+where empno not in
+(SELECT distinct e.empno
+FROM employee e inner join ordertbl o
+on e.empno = o.empno
+inner join ordline l
+on o.ordno = l.ordno
+inner join product p
+on l.prodno = p.prodno
+where prodname like '%Color Monitor')
+
+
+SELECT custcity, Count(*) AS NumShipments
+FROM customer c inner join ordertbl o
+on c.custno = o.custno
+Where to_char(orddate, 'Mon YYYY') = 'Feb 2007'
+group by custcity
+Having count(*) = 
+(Select max(NumShipments)
+from
+(SELECT custcity, Count(*) AS NumShipments
+FROM customer c inner join ordertbl o
+on c.custno = o.custno
+Where to_char(orddate, 'Mon YYYY') = 'Feb 2007'
+group by custcity))
+
+
+
+SELECT custcity, COUNT(*) AS NumCities
+FROM customer
+group by custcity
+having count (*)=
+(Select Max(NumCities)
+from
+(SELECT custcity, COUNT(*) AS NumCities
+FROM customer
+group by custcity));
+
+Select AVG(TotalPerOrder) AS AveragePerOrder
+from
+(SELECT ordno, SUM(QTY) AS TotalPerOrder
+from ordline l
+group by ordno);
+
+Select CustName
+from
+(SELECT custfirstname ||' '||custlastname AS CustName, ordname
+from customer c inner join ordertbl o
+on c.custno = o.custno)
+Where custname!= Ordname
+
+select empfirstname, emplastname
+from employee
+where empcommrate >
+(SELECT AVG(Empcommrate)
+from employee);
+
+Select ProdName, SUM(TotalOrder) AS SumOfOrder
+FROM
+  (SELECT Prodname, prodprice  * qty AS TotalOrder
+      FROM product p inner join ordline l
+      on p.prodno = l.prodno
+      inner join ordertbl o
+      on o.ordno = l.ordno
+      where To_char(orddate, 'Mon YYYY') = 'Jan 2007')
+      group by prodname
+      having sum(TotalOrder)
+          (Select Max(SumOfOrder)
+          From
+            (Select prodname, SUM(TotalOrder) AS SumofOrder
+               FROM
+              (SELECT Prodname, prodprice * QTY AS TotalOrder
+              FROM product p inner join ordline l
+              on p.prodno = l.prodno
+              inner join ordertbl o
+              on o.ordno = l.ordno
+              where To_char(orddate, 'Mon YYYY') = 'Jan 2007')
+        group by prodname));
+        
+        
+Select empfirstname, emplastname
+from employee
+where empno NOT IN
+          (SELECT distinct empno
+          FROM ordertbl o inner join ordline l
+          on o.ordno = l.ordno
+          inner join product p
+          on p.prodno = l.prodno
+          Where p.prodmfg = 'Connex'
+          and empno is not null)
+        
+        
+
+
+1.)
+SELECT e.student_id
+FROM enrollment e inner join student s
+on e.student_id = s.student_id
+Where e.section_id LIKE ('1%')
+Having Count(*) > 3
+group by e.student_id;
+
+2.)
+SELECT g.student_id, s.last_name, s.first_name
+FROM grade g inner join student s
+on g.student_id = s.student_id
+inner join section t
+on g.section_id = t.section_id
+inner join course c
+on t.course_no = c.course_no
+Where g.section_id LIKE '%100%'
+AND g.grade_type_code LIKE '%FI%'
+AND c.course_no LIKE '%230%'
+AND g.numeric_grade > 84;
+
+3.)
+SELECT salutation, first_name, last_name, zip
+from instructor
+where instructor_id NOT IN
+(SELECT distinct instructor_id
+from section);
+
+4.)
+SELECT t.last_name, AVG(g.numeric_grade)
+FROM grade g inner join section s
+on g.section_id = s.section_id
+inner join student t
+on g.student_id = t.student_id
+where g.grade_type_code LIKE 'FI'
+AND s.section_id LIKE 90
+Having avg(g.numeric_grade) > 90
+group by t.last_name;
+
+5.)
+SELECT c.course_no, c.description, count(*) AS EnrolledStudents
+FROM course c inner join section s
+on c.course_no = s.course_no
+inner join enrollment e
+on s.section_id = e.section_id
+group by  c.course_no, c.description
+Having Count(*)=
+(Select MIN(EnrolledStudents)
+from
+(SELECT c.course_no, c.description, count(*) AS EnrolledStudents
+FROM course c inner join section s
+on c.course_no = s.course_no
+inner join enrollment e
+on s.section_id = e.section_id
+group by  c.course_no, c.description))
+order by c.course_no;
+
+6.)
+SELECT c.course_no, c.description
+FROM course c inner join section s
+on c.course_no = s.course_no
+where To_Char(Start_Date_Time, 'HH:MI') = '10:30'
+order by c.course_no;
+
+7.)
+
+NOT DONE!!!!!!!!!!!!!!!!!!!!!!
+
+Select s.student_id, s.last_name, Count(*) AS AverageGrade
+from grade g inner join student s
+on g.student_id = s.student_id
+inner join section t
+on g.section_id = t.section_id
+where t.section_id LIKE '120'
+and g.grade_type_code LIKE 'QZ'
+group by s.student_id, s.last_name;
+
+NOT DONE!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+8.)
+NOT DONE!!!!!!!!!!!!!!!!!!!!!!
+
+SELECT s.first_name, s.last_name, s.phone
+FROM student s inner join enrollment e
+on e.student_id = s.student_id
+inner join section g
+on e.section_id = g.section_id
+inner join course c
+on c.course_no = g.course_no
+Where c.description LIKE 'Project Management'
+
+NOT DONE!!!!!!!!!!!!!!!!!!!!!!
+
+9.)
+select i.first_name, i.last_name, c.course_no, c.description
+from instructor i inner join section s
+on i.instructor_id = s.instructor_id
+inner join course c
+on s.course_no = c.course_no
+where c.description LIKE '%Java%'
+and i.instructor_id=
+    (Select i.instructor_id
+      from instructor i inner join section s
+      on i.instructor_id = s.instructor_id
+      inner join course c
+      on s.course_no = c.course_no
+      where c.description LIKE '%Java%'
+      group by i.instructor_id
+      Having COUNT(*)=
+(SELECT Max(NumCoursesTaught)
+FROM
+      (select i.instructor_id, COUNT(*) AS NumCoursesTaught
+      from instructor i inner join section s
+      on i.instructor_id = s.instructor_id
+      inner join course c
+      on s.course_no = c.course_no
+      where c.description LIKE '%Java%'
+      group by i.instructor_id)))
+order by i.last_name, c.description;
+
+10.)
+
+SELECT distinct s.student_id, s.last_name
+FROM student s inner join grade g
+on s.student_id = g.student_id
+inner join section t
+on t.section_id = g.section_id
+where t.section_id LIKE '130'
+and g.numeric_grade >
+      (SELECT  AVG(numeric_grade)
+      FROM grade
+      where g.grade_type_code LIKE 'FI');
