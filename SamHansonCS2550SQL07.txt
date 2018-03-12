@@ -1,0 +1,94 @@
+1.)
+Select last_name, first_name
+from instructor
+where instructor_id NOT IN
+(SELECT distinct instructor_id
+from section  sec inner join grade_type_weight gtw
+on sec.section_id = gtw.section_id
+where gtw.grade_type_code = 'PJ')
+order by last_name;
+
+2.)
+Select Count(*)
+from grade
+where section_id = 86
+and grade_type_code = 'FI'
+and numeric_grade <
+(SELECT AVG(numeric_grade)
+from grade
+Where section_id = 86
+and grade_type_code = 'FI');
+
+
+
+
+
+3.)
+(Select MAX(NumStudents)
+from
+(select city, state, COUNT(*) as NumStudents
+from zipcode z inner join student s
+on z.zip = s.zip
+inner join enrollment e
+on s.student_id = e.student_id
+group by city, state));
+
+4.)
+
+
+
+
+
+5.)
+select student_id
+from
+(Select student_id, course_no, Count(*)
+from
+(SELECT e.student_id, s.course_no, s.section_id
+from enrollment e inner join section s
+on e.section_id = s.section_id)
+group by student_id, course_no
+having count(*) > 1);
+
+
+
+
+6.)
+
+
+
+7.)
+
+
+
+
+
+8.)
+Select distinct first_name, last_name
+from enrollment e inner join section sec
+on e.section_id = sec.section_id
+inner join student s
+on s.student_id = e.student_id
+where sec.course_no IN
+(SELECT Course_no
+from section
+where To_Char(start_date_time, 'HH:MI AM') = '10:30 AM')
+order by last_name;
+
+
+9.)
+
+
+
+
+
+10.)
+6 sub queries
+SELECT first_name, last_name, phone
+from student
+where student_id IN
+((Find student_id of those Where description = 'Intro to SQL')
+or student_id IN
+(Find student_id of those Where description = 'Database Design');
+
+enrollement to section to course
