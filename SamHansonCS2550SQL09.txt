@@ -1,0 +1,52 @@
+1.)
+Select s.student_id, last_name, first_name, employer, Count(*) as enrolled
+from student s inner join enrollment e
+on s.student_id = e.student_id
+group by s.student_id, last_name, first_name, employer
+having Count(*) =
+(Select Max(enrolled)
+from
+(Select s.student_id, last_name, first_name, employer, Count(*) as enrolled
+from student s inner join enrollment e
+on s.student_id = e.student_id
+group by s.student_id, last_name, first_name, employer))
+order by s.last_name, s.first_name;
+
+2.)
+Select distinct i.zip, i.first_name, i.last_name, i.phone
+from student s inner join enrollment e
+on s.student_id = e.student_id
+inner join section t
+on e.section_id = t.section_id
+inner join instructor i
+on t.instructor_id = i.instructor_id
+where i.zip = s.zip
+order by i.first_name;
+
+3.)
+Select first_name, last_name, z.city, 'Student' as Role
+from student s  inner join zipcode z
+on s.zip = z.zip
+where z.zip = '10025'
+UNION
+Select first_name, last_name, z.city, 'Instructor'as Role
+from instructor i inner join zipcode z
+on i.zip = z.zip
+where z.zip = '10025'
+order by Role, last_name, first_name;
+
+4.)
+NOT DONE
+
+(SELECT location, Count (*) as Students
+from enrollment e inner join section s
+on e.section_id = s.section_id
+group by location) Stu
+
+INNER JOIN
+
+(SELECT location, Count(*) as Sections
+FROM section
+group by location) Sec
+
+ON Stu.location = Sec.location;
