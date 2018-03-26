@@ -50,3 +50,66 @@ FROM section
 group by location) Sec
 
 ON Stu.location = Sec.location;
+
+5.)
+SELECT grade_type_code, To_Char(numeric_grade)
+FROM grade
+where student_id = 139
+and section_id = 95
+
+UNION ALL
+
+SELECT 'Average for student 139 is',To_Char(AVG(Numeric_grade),'99.99')
+from grade
+where student_id = 139
+and section_id = 95;
+
+
+6.)
+Select first_name, last_name, NVL(sections,0) as sections
+from
+(SELECT first_name, last_name, instructor_ID
+FROM instructor) i
+LEFT OUTER JOIN
+(SELECT instructor_id, COUNT(*) as SECTIONS
+from section
+group by instructor_id) s
+on i.instructor_id = s.instructor_id
+order by Last_name, First_name;
+
+7.)
+  SELECT course_no, description
+  from
+    (SELECT distinct c.course_no, c.description, g.grade_type_code
+    FROM course c inner join section s
+    on c.course_no = s.course_no
+    inner join grade_type_weight gtw
+    on s.section_id = gtw.section_id
+    inner join grade g
+    on gtw.section_id = g.section_id)
+  group by course_no, description
+  having count(*) =
+   (SELECT COUNT(*)
+   from grade_type)
+   order by course_no;
+
+8.)
+Select z.zip, city, NVL(Students, 0) as students
+from
+(SELECT zip, city
+FROM zipcode
+where city = 'Flushing') z
+
+LEFT OUTER JOIN
+
+(Select z.zip, COUNT(*) as students
+from enrollment e inner join student s
+on e.student_id = s.student_id
+inner join zipcode z
+on z.zip = s.zip
+group by z.zip) s
+on z.zip = s.zip;
+
+
+9.)
+
