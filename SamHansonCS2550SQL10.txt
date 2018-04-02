@@ -1,0 +1,154 @@
+SELECT *
+FROM customer;
+
+INSERT INTO customer
+(custno, custfirstname, custlastname, custstreet, 
+custcity, custstate, custzip, custbal)
+Values
+('C9999999', 'Sam', 'Hanson', '2550 Celtic Dr.', 'Ogden', 'UT',
+'84408', 0.00)
+
+SAVEPOINT C9999999 ;
+
+INSERT INTO customer
+(custno, custfirstname, custlastname, custstreet, 
+custcity, custstate, custzip, custbal)
+Values
+('C9999998', 'Rusty', 'Trombone', '2550 Celtic Dr.', 'Ogden', 'UT',
+'84408', 1000.00)
+
+SAVEPOINT C9999998 ;
+
+UPDATE Customer
+Set custbal = 100
+Where custno = 'C9999998'
+
+SAVEPOINT CustBal100;
+
+DELETE FROM Customer
+Where custno = 'C9999999'
+
+Rollback;
+
+
+
+SELECT *
+FROM ordertbl;
+
+INSERT INTO ordertbl
+(ordno, orddate, custno, empno, ordname, ordstreet, ordcity,ordstate,ordzip)
+VALUES
+('O8745632', SYSDATE, 'C9999999', 'E9954320', 'Bichael Two-Speed', 'Wasatch Rd',
+'Ogden', 'UT', '84403')
+
+INSERT INTO ordertbl
+(ordno, orddate, custno, empno, ordname, ordstreet, ordcity, ordstate, ordzip)
+SELECT ('O87456321', SYSDATE, 'C9999999', 'E9954320', 'Bichael Two-Speed', 'Wasatch Rd','Ogden', 'UT', '84403')
+FROM customer
+where custno IN ('C9999999')
+
+
+1.)
+SELECT *
+from instructor;
+
+insert into instructor
+(instructor_id, salutation, first_name, last_name, street_address, zip
+, phone, created_by, created_date, modified_by, modified_date)
+Values
+('815', 'Mr.', 'Hugo', 'Reyes', '2342 Oceanic Way',
+'07002', null, 'Sam Hanson', sysdate, 'Sam Hanson', sysdate);
+
+2.)
+Select *
+from section;
+
+Insert into section
+(section_id, course_no, section_no, start_date_time, location, instructor_id, capacity
+, created_by, created_date, modified_by, modified_date)
+values
+(48,142, 4, To_Date('Sep. 22, 2011, 8:15 AM', 'MON DD, YYYY, HH:MI, AM'), 
+'L211', 815, 15, 'Sam Hanson', sysdate,'Sam Hanson', sysdate);
+
+3.)
+Select *
+from enrollment;
+
+insert into enrollment (student_id, section_id, enroll_date, final_grade, created_by, created_date,
+modified_by, modified_date)
+
+SELECT student_id, 48, sysdate, null, 'Sam Hanson', sysdate,
+'Sam Hanson', sysdate
+from student
+where student_id in( 375, 137, 266, 382);
+
+4.)
+Delete from grade
+where student_id = 147
+and section_id = 120;
+
+Delete from enrollment
+where student_id = 147
+and section_id = 120;
+
+5.)
+Delete from grade
+where student_id = 180
+and section_id = 119;
+
+Delete from enrollment
+where student_id = 180
+and section_id = 119;
+
+6.)
+Update instructor
+set phone = '4815162342'
+where instructor_id = 815;
+
+7.)
+Update grade
+set numeric_grade = 100
+where grade_type_code = 'HM'
+and grade_code_occurrence = 1
+and section_id = 119;
+
+8.)
+Update grade
+set numeric_grade = numeric_grade * 1.1
+where grade_type_code = 'FI'
+and section_id = 119;
+
+9.)
+NOT DONE!@#@!#!!
+
+select s.section_id, s.location, count(*)as enrolled
+from section s inner join course c
+on s.course_no = c.course_no
+where c.description = 'Project Management'
+group by s.section_id, s.location;
+
+10.)
+
+select i.first_name, i.last_name, i.phone
+from instructor i inner join section s
+on i.instructor_id = s.instructor_id
+inner join course c
+on s.course_no = c.course_no
+where c.description = 'Project Management'
+order by i.first_name, i.last_name;
+
+11.)
+SELECT g.student_id, s.first_name, s.last_name, Round(AVG(g.numeric_grade), 2) AS Average
+FROM grade g inner join student s
+on g.student_id = s.student_id
+where g.section_id = 119
+group by g.student_id, s.first_name, s.last_name
+order by g.student_id;
+
+12.)
+
+
+
+
+
+
