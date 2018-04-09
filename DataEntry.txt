@@ -1,0 +1,253 @@
+Drop Table Artist;
+Drop Table Album;
+Drop Table Genre;
+Drop table MediaType;
+Drop table Track;
+
+
+
+
+
+Create Table Artist (
+ArtistID number(10) NOT NULL,
+Name varchar2(120) NOT NULL);
+
+Alter Table Artist
+Add constraint PK_Artist PRIMARY KEY (ArtistID);
+
+Create Table Album (
+AlbumID number(10) NOT NULL,
+Title varchar2(160) NOT NULL,
+ArtistID number(10)NOT NULL);
+
+Alter table Album
+add constraint PK_Album_Album Primary KEY(AlbumID);
+
+Alter table Album
+Add constraint FK_Album_ArtistID FOREIGN KEY(ArtistID)
+References Artist(ArtistID);
+
+
+
+Create Table Genre (
+GenreID number(10) NOT NULL,
+Name varchar2(120) NOT NULL);
+
+Alter table Genre
+Add constraint PK_Genre Primary Key (GenreID);
+
+Create table MediaType (
+MediaTypeID number(10) NOT NULL,
+Name varchar2(120) NOT NULL);
+
+Alter table MediaType
+Add constraint PK_MediaType Primary Key (MediaTypeID);
+
+Create table Track (
+TrackID number(10) NOT NULL,
+Name varchar2(200) NOT NULL,
+AlbumID number(10) NOT NULL,
+MediaTypeID number(10) NOT NULL,
+GenreID number(10) NOT NULL,
+Composer varchar2(220),
+Milliseconds number(10) NOT NULL,
+Bytes number(10) NOT NULL,
+UnitPrice number(10, 2) NOT NULL);
+
+Alter table Track
+Add constraint PK_TrackID Primary key (TrackID);
+
+Alter table Track
+Add constraint FK_AlbumID Foreign Key (AlbumID)
+References Album(AlbumID);
+
+Alter table Track
+Add constraint FK_MediaTypeID Foreign Key (MediaTypeID)
+References MediaType(MediaTypeID);
+
+Alter table Track
+Add constraint Fk_GenreID Foreign Key (GenreID)
+References Genre(GenreID);
+
+Insert into Genre
+Values (1, 'Rock');
+
+Insert into Genre
+Values (2, 'Jazz');
+
+Insert into Genre
+Values (3, 'Metal');
+
+Insert into Genre
+Values (4, 'Alternative/Punk');
+
+Insert into Genre
+Values (5, 'Rock And Roll');
+
+Insert into Genre
+Values (6, 'Blues');
+
+Insert into Genre
+Values (7, 'Latin');
+
+Insert into Genre
+Values (8, 'Reggae');
+
+Insert into Genre
+Values (9, 'Pop');
+
+Insert into Genre
+Values (10, 'Soundtrack');
+
+Insert into Genre
+Values (11, 'Bossa Nova');
+
+Insert into Genre
+Values (12, 'Easy Listening');
+
+Insert into Genre
+Values (13, 'Heavy Metal');
+
+Insert into Genre
+Values (14, 'RB/Soul');
+
+Insert into Genre
+Values (15, 'Electronica/Dance');
+
+Insert into Genre
+Values (16, 'World');
+
+Insert into Genre
+Values (17, 'Hip Hop/Rap');
+
+Insert into Genre
+Values (18, 'Science Fiction');
+
+Insert into Genre
+Values (19, 'Tv Shows');
+
+Insert into Genre
+Values (20, 'Sci Fi and Fantasy');
+
+Insert into Genre
+Values (21, 'Drama');
+
+Insert into Genre
+Values (22, 'Comedy');
+
+Insert into Genre
+Values (23, 'Alternative');
+
+Insert into Genre
+Values (24, 'Classical');
+
+Insert into Genre
+Values (25, 'Opera');
+
+Insert into MediaType
+Values (1, 'MPEG audio file');
+
+Insert into MediaType
+Values (2, 'Protected AAC audio file');
+
+Insert into MediaType
+Values (3, 'Protected MPEG-4 video file');
+
+Insert into MediaType
+Values (4, 'Purchased AAC audio file');
+
+Insert into MediaType
+Values (5, 'AAC audio file');
+
+Insert into Artist
+Values (1, 'AC/DC');
+
+Insert into Artist
+Values (2, 'Accept');
+
+Insert into Artist
+Values (3, 'Aerosmith');
+
+Insert into Artist
+Values (4, 'Alanis Morissette');
+
+Insert into Artist
+Values (5, 'Alice In Chains');
+
+Insert into Artist
+Values (6, 'Antonio Carlos Jobirn');
+
+Insert into Artist
+Values (7, 'Apocalyptica');
+
+Insert into Artist
+Values (8, 'Audioslave');
+
+Insert into Artist
+Values (9, 'BackBeat');
+
+Insert into Artist
+Values (10, 'Billy Cobharn');
+
+Insert into Artist
+Values (11, 'Black Label Society');
+
+Insert into Artist
+Values (12, 'Black Sabbath');
+
+Insert into Album
+Values (1, 'For Those About To Rock We Salute You', 1);
+
+Insert into Album
+Values (2, 'Balls to the Wall', 2);
+
+Insert into Album
+Values (3, 'Restless and Wild', 2);
+
+Insert into Album
+Values (4, 'Let There Be Rock', 1);
+
+Insert into Album
+Values (5, 'Big Ones', 3);
+
+Insert into Album
+Values (6, 'Jagged Little Pill', 4);
+
+Insert into Album
+Values (7, 'Facelift', 5);
+
+Insert into Album
+Values (8, 'Warner 25 Anos', 6);
+
+Insert into Album
+Values (9, 'Plays Metallica By Four Cellos', 7);
+
+Insert into Album
+Values (10, 'Audioslave', 8);
+
+Insert into Album
+Values (11, 'Out Of Exile', 8);
+
+Insert into Album
+Values (12, 'BackBeat Soundtrack', 9);
+
+Insert into Album
+Values (13, 'The Best of Billy Cobharn', 10);
+
+Insert into Album
+Values (14, 'Alcohol Fueled Brewtality Live! [Disc 1]', 11);
+
+Insert into Album
+Values (15, 'Alcohol Fueled Brewtality Live! [Disc 2]', 11);
+
+Insert into Album
+Values (16, 'Black Sabbath', 12);
+
+Insert into Album
+Values (17, 'Black Sabbath Vol. 4 (Remaster)', 12);
+
+Insert into Album
+Values (34, 'Chill: Brazil (Disc 2)', 6);
+
+Insert into Album
+Values (271, 'Revelations', 8);
