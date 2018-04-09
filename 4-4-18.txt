@@ -1,0 +1,72 @@
+DROP TABLE MovieDirector;
+DROP TABLE MovieActor;
+DROP TABLE Movie;
+DROP TABLE Actor;
+DROP TABLE Director;
+
+
+CREATE TABLE Movie (
+MovieID Varchar2(10) NOT NULL, --10 is how many
+MovieTitle Varchar2(255) NOT NULL,
+Rating Varchar2(4),
+MovieLength Number(3,0) NOT NULL, --3 is total digits, 0 is after decimal
+ReleaseDate Date NOT NULL
+);
+
+CREATE TABLE Actor (
+ActorID Varchar2(10) NOT NULL,
+ActorFirstName Varchar2(25) NOT NULL,
+ActorLastName Varchar2(50) NOT NULL,
+ActorMiddleName Varchar2(25)
+);
+
+CREATE TABLE Director (
+DirectorID Varchar2(10) NOT NULL,
+DirectorFirstName Varchar2(25) NOT NULL,
+DirectorLastName Varchar2(50) NOT NULL,
+DirectorMiddleName Varchar2(25)
+);
+
+CREATE TABLE MovieActor ( --Association Tables
+MovieID Varchar2(10) NOT NULL,
+ActorID Varchar2(10) NOT NULL
+);
+
+CREATE TABLE MovieDirector (
+MovieID Varchar2(10) NOT NULL,
+DirectorID Varchar2(10) NOT NULL
+);
+
+--Create Primary Keys
+ALTER TABLE Movie
+ADD CONSTRAINT PK_Movie PRIMARY KEY(MovieID);
+
+ALTER TABLE Actor
+ADD CONSTRAINT PK_Actor PRIMARY KEY(ActorID);
+
+ALTER TABLE Director
+ADD CONSTRAINT PK_Director PRIMARY KEY(DirectorID);
+
+ALTER TABLE MovieActor
+ADD CONSTRAINT PK_MovieActor PRIMARY KEY(MovieID, ActorID); --Two PK Fields
+
+ALTER TABLE MovieDirector
+ADD CONSTRAINT PK_MovieDirector PRIMARY KEY(MovieID, DirectorID);
+
+
+--Create Foreign Keys
+ALTER TABLE MovieActor
+ADD CONSTRAINT FK_MovieActor_MovieID FOREIGN KEY(MovieID) --Field in our table
+REFERENCES Movie(MovieID); --What other table/column
+
+ALTER TABLE MovieActor
+ADD CONSTRAINT FK_MovieActor_ActorID FOREIGN KEY(ActorID)
+REFERENCES Actor(ActorID);
+
+ALTER TABLE MovieDirector
+ADD CONSTRAINT FK_MovieDirector_MovieID FOREIGN KEY(MovieID) --Field in our table
+REFERENCES Movie(MovieID); --What other table/column
+
+ALTER TABLE MovieDirector
+ADD CONSTRAINT FK_MovieDirector_DirectorID FOREIGN KEY(DirectorID)
+REFERENCES Director(DirectorID);
